@@ -6,7 +6,7 @@ import android.content.Intent;
 import androidx.fragment.app.Fragment;
 
 import com.google.gson.Gson;
-import com.isi.isiapi.classes.IsiCashBillAndElements;
+import com.isi.isiapi.classes.isicash.IsiCashBillAndElements;
 
 public class SendDataToIsiCashier {
 
