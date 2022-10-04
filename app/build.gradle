@@ -9,8 +9,8 @@ android {
         applicationId "com.isi.isicashierlibrary"
         minSdkVersion 24
         targetSdkVersion 33
-        versionCode 34
-        versionName "2.0.3"
+        versionCode 35
+        versionName "2.0.4"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
