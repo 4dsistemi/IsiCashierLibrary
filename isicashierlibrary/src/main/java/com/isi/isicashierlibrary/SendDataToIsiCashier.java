@@ -12,21 +12,15 @@ import com.isi.isiapi.classes.isicash.IsiCashBillAndElements;
 
 public abstract class SendDataToIsiCashier {
 
+    private final ActivityResultLauncher<Intent> someActivityResultLauncher;
+
     public abstract void operationAfterResultOk();
     public abstract void operationAfterResultError();
     public abstract void operationAfterResultCancel();
 
-    public void sendBill(IsiCashBillAndElements bill, ComponentActivity activity){
+    public SendDataToIsiCashier(ComponentActivity activity){
 
-        Intent myIntent = new Intent();
-        myIntent.setClassName("com.isi.isicashier", "com.isi.isicashier.MainActivity");
-        Gson gson = new Gson();
-        String jsonString = gson.toJson(bill);
-        myIntent.putExtra("data", jsonString);
-        myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-        // You can do the assignment inside onAttach or onCreate, i.e, before the activity is displayed
-        ActivityResultLauncher<Intent> someActivityResultLauncher = activity.registerForActivityResult(
+        someActivityResultLauncher = activity.registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if(result.getData() != null){
@@ -47,20 +41,11 @@ public abstract class SendDataToIsiCashier {
                         }
                     }
                 });
-
-        someActivityResultLauncher.launch(myIntent);
-
     }
 
-    public void sendBill(IsiCashBillAndElements bill, Fragment activity){
+    public SendDataToIsiCashier(Fragment fragment){
 
-        Intent myIntent = new Intent();
-        myIntent.setClassName("com.isi.isicashier", "com.isi.isicashier.MainActivity");
-        Gson gson = new Gson();
-        String jsonString = gson.toJson(bill);
-        myIntent.putExtra("data", jsonString);
-        myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        ActivityResultLauncher<Intent> someActivityResultLauncher = activity.registerForActivityResult(
+        someActivityResultLauncher = fragment.registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if(result.getData() != null){
@@ -81,6 +66,16 @@ public abstract class SendDataToIsiCashier {
                         }
                     }
                 });
+    }
+
+    public void sendBill(IsiCashBillAndElements bill){
+
+        Intent myIntent = new Intent();
+        myIntent.setClassName("com.isi.isicashier", "com.isi.isicashier.MainActivity");
+        Gson gson = new Gson();
+        String jsonString = gson.toJson(bill);
+        myIntent.putExtra("data", jsonString);
+        myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         someActivityResultLauncher.launch(myIntent);
 
