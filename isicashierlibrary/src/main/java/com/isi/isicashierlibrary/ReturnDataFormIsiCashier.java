@@ -5,32 +5,28 @@ import android.content.Intent;
 
 public class ReturnDataFormIsiCashier {
 
-    public IsiCashierResponse getResponse(int requestCode, int resultCode, Intent data){
+    public IsiCashierResponse getResponse(int resultCode, Intent data){
 
-        if(requestCode == RequestCode.reqCode){
-            IsiCashierResponse response = new IsiCashierResponse();
+        IsiCashierResponse response = new IsiCashierResponse();
 
-            if(resultCode == Activity.RESULT_CANCELED){
-                response.returnCode = ISICASHIER_EXIT.CANCELED;
-            }else{
-                response.returnCode = ISICASHIER_EXIT.OK;
+        if(resultCode == Activity.RESULT_CANCELED){
+            response.returnCode = ISICASHIER_EXIT.CANCELED;
+        }else{
+            response.returnCode = ISICASHIER_EXIT.OK;
 
-                boolean error = data.getBooleanExtra("error", true);
-                float total = data.getFloatExtra("total", 0);
-                float discount = data.getFloatExtra("discount", 0);
-                String ctzonCard = data.getStringExtra("ctzonCard");
+            boolean error = data.getBooleanExtra("error", true);
+            float total = data.getFloatExtra("total", 0);
+            float discount = data.getFloatExtra("discount", 0);
+            String ctzonCard = data.getStringExtra("ctzonCard");
 
-                response.total = total;
-                response.error = error;
-                response.discount = discount;
-                response.ctzonCard = ctzonCard;
-            }
-
-
-            return response;
+            response.total = total;
+            response.error = error;
+            response.discount = discount;
+            response.ctzonCard = ctzonCard;
         }
 
-        return null;
+
+        return response;
 
     }
 

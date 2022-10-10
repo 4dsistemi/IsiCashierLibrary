@@ -1,29 +1,22 @@
 package com.isi.isicashierlibrary;
 
-import android.app.Activity;
 import android.content.Intent;
 
+import androidx.activity.ComponentActivity;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
 
 import com.google.gson.Gson;
 import com.isi.isiapi.classes.isicash.IsiCashBillAndElements;
-import com.isi.isiapi.classes.isiorder.IsiorderOrder;
 
-public class SendDataToIsiCashier {
+public abstract class SendDataToIsiCashier {
 
-    public static void sendBill(IsiCashBillAndElements bill, Activity activity){
+    public abstract void operationAfterResultOk();
+    public abstract void operationAfterResultError();
+    public abstract void operationAfterResultCancel();
 
-        Intent myIntent = new Intent();
-        myIntent.setClassName("com.isi.isicashier", "com.isi.isicashier.MainActivity");
-        Gson gson = new Gson();
-        String jsonString = gson.toJson(bill);
-        myIntent.putExtra("data", jsonString);
-        myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        activity.startActivityForResult(myIntent, RequestCode.reqCode);
-
-    }
-
-    public static void sendBill(IsiCashBillAndElements bill, Fragment activity){
+    public void sendBill(IsiCashBillAndElements bill, ComponentActivity activity){
 
         Intent myIntent = new Intent();
         myIntent.setClassName("com.isi.isicashier", "com.isi.isicashier.MainActivity");
@@ -31,14 +24,65 @@ public class SendDataToIsiCashier {
         String jsonString = gson.toJson(bill);
         myIntent.putExtra("data", jsonString);
         myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        activity.startActivityForResult(myIntent, RequestCode.reqCode);
+
+        // You can do the assignment inside onAttach or onCreate, i.e, before the activity is displayed
+        ActivityResultLauncher<Intent> someActivityResultLauncher = activity.registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if(result.getData() != null){
+                        Intent data = result.getData();
+
+                        IsiCashierResponse response = new IsiCashierResponse().getResponse(result.getResultCode(), data);
+
+                        if(response.error){
+                            operationAfterResultError();
+                        }else{
+
+                            if(response.returnCode == ISICASHIER_EXIT.OK){
+                                operationAfterResultOk();
+                            }else if(response.returnCode == ISICASHIER_EXIT.CANCELED){
+                                operationAfterResultCancel();
+                            }
+
+                        }
+                    }
+                });
+
+        someActivityResultLauncher.launch(myIntent);
 
     }
 
-    public static void openPrinterSettings(Activity activity){
+    public void sendBill(IsiCashBillAndElements bill, Fragment activity){
+
         Intent myIntent = new Intent();
-        myIntent.setClassName("com.isi.isicashier", "com.isi.isicashier.printerSettings.PrintersActivity");
-        activity.startActivityForResult(myIntent, RequestCode.reqCode);
-    }
+        myIntent.setClassName("com.isi.isicashier", "com.isi.isicashier.MainActivity");
+        Gson gson = new Gson();
+        String jsonString = gson.toJson(bill);
+        myIntent.putExtra("data", jsonString);
+        myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        ActivityResultLauncher<Intent> someActivityResultLauncher = activity.registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if(result.getData() != null){
+                        Intent data = result.getData();
 
+                        IsiCashierResponse response = new IsiCashierResponse().getResponse(result.getResultCode(), data);
+
+                        if(response.error){
+                            operationAfterResultError();
+                        }else{
+
+                            if(response.returnCode == ISICASHIER_EXIT.OK){
+                                operationAfterResultOk();
+                            }else if(response.returnCode == ISICASHIER_EXIT.CANCELED){
+                                operationAfterResultCancel();
+                            }
+
+                        }
+                    }
+                });
+
+        someActivityResultLauncher.launch(myIntent);
+
+    }
 }
