@@ -14,7 +14,7 @@ public abstract class SendDataToIsiCashier {
 
     private final ActivityResultLauncher<Intent> someActivityResultLauncher;
 
-    public abstract void operationAfterResultOk();
+    public abstract void operationAfterResultOk(IsiCashierResponse response);
     public abstract void operationAfterResultError();
     public abstract void operationAfterResultCancel();
 
@@ -33,7 +33,7 @@ public abstract class SendDataToIsiCashier {
                         }else{
 
                             if(response.returnCode == ISICASHIER_EXIT.OK){
-                                operationAfterResultOk();
+                                operationAfterResultOk(response);
                             }else if(response.returnCode == ISICASHIER_EXIT.CANCELED){
                                 operationAfterResultCancel();
                             }
@@ -58,7 +58,7 @@ public abstract class SendDataToIsiCashier {
                         }else{
 
                             if(response.returnCode == ISICASHIER_EXIT.OK){
-                                operationAfterResultOk();
+                                operationAfterResultOk(response);
                             }else if(response.returnCode == ISICASHIER_EXIT.CANCELED){
                                 operationAfterResultCancel();
                             }
