@@ -7,9 +7,9 @@ class IsiCashierResponse {
 
     var returnCode: ISICASHIER_EXIT? = null
     var error = false
-    private var total = 0f
-    private var discount = 0f
-    private var ctzonCard: String? = null
+    var total = 0f
+    var discount = 0f
+    var ctzonCard: String? = null
 
     fun getResponse(resultCode: Int, data: Intent?): IsiCashierResponse {
         val response = IsiCashierResponse()
