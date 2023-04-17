@@ -17,8 +17,11 @@ public abstract class SendDataToIsiCashier {
     public abstract void operationAfterResultOk(IsiCashierResponse response);
     public abstract void operationAfterResultError();
     public abstract void operationAfterResultCancel();
+    private final String version;
 
-    public SendDataToIsiCashier(ComponentActivity activity){
+    public SendDataToIsiCashier(ComponentActivity activity, String version){
+
+        this.version = version;
 
         someActivityResultLauncher = activity.registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -43,7 +46,9 @@ public abstract class SendDataToIsiCashier {
                 });
     }
 
-    public SendDataToIsiCashier(Fragment fragment){
+    public SendDataToIsiCashier(Fragment fragment, String version){
+
+        this.version = version;
 
         someActivityResultLauncher = fragment.registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -71,7 +76,7 @@ public abstract class SendDataToIsiCashier {
     public void sendBill(IsiCashBillAndElements bill){
 
         Intent myIntent = new Intent();
-        myIntent.setClassName("com.isi.isicashier", "com.isi.isicashier.MainActivity");
+        myIntent.setClassName("com.isi.isicashier" + version, "com.isi.isicashier.MainActivity");
         Gson gson = new Gson();
         String jsonString = gson.toJson(bill);
         myIntent.putExtra("data", jsonString);
