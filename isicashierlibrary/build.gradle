@@ -38,8 +38,13 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
-    implementation 'com.github.4dsistemi:IsiApi:5.0.18'
+    implementation 'com.github.4dsistemi:IsiApi:5.1.23'
     implementation 'com.google.code.gson:gson:2.10.1'
+    implementation 'com.github.4dsistemi:IsiAppLibrary:3.1.13'
+    implementation 'com.github.4dsistemi:SunmiPaxxPrinter:1.0.1'
+    implementation 'com.github.smart-fun:XmlToJson:1.5.1'
+    implementation 'org.apache.commons:commons-text:1.9'
+    implementation "com.squareup.okhttp3:okhttp:4.10.0"
 
 
 }
